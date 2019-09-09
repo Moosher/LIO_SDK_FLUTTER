@@ -14,59 +14,105 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String _status = "Nope";
+  final control = TextEditingController();
   int _orders = 0;
-  static const platform = const MethodChannel('com.example.primeiro_projeto/service');
-  
-  void _changeOrder(int delta){
+  static const platform =
+      const MethodChannel('com.example.primeiro_projeto/service');
+
+  void _addOrder() {
+    try {
+      platform.invokeMethod(
+          "start", <String, String>{"valor": control.text, "param2": "test2"});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _destroyBind() {
+    try {
+      platform.invokeMethod("destroy");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _getMethods() {
+    try {
+      platform.invokeMethod("methods");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _getOrder() {
+    try {
+      platform.invokeMethod("order");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _payOrder() async {
+    try {
+      String valor = await platform.invokeMethod("pay");
+      changeStatus(valor);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void changeStatus(String valor) {
     setState(() {
-      this._orders += delta;
-      platform.invokeMethod("start");
+      _status = valor;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Image.asset(
-          "images/restaurant.jpg",
-          fit: BoxFit.cover,
-          height: 1000,
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("Orders: $_orders",
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: FlatButton(
-                    child: Text(
-                      "+1",
-                      style: TextStyle(color: Colors.white, fontSize: 30),
-                    ),
-                    onPressed: () {_changeOrder(1);},
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: FlatButton(
-                    child: Text(
-                      "-1",
-                      style: TextStyle(color: Colors.white, fontSize: 30),
-                    ),
-                    onPressed: () {_changeOrder(-1);},
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("VEK PAY"),
+      ),
+      body: SingleChildScrollView(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextField(
+                controller: control,
+                decoration: InputDecoration(labelText: "Valor"),
+              ),
+              Divider(),
+              RaisedButton(
+                child: Text("ADICIONAR"),
+                onPressed: () {
+                  this._addOrder();
+                },
+              ),
+              RaisedButton(
+                child: Text("ENVIAR"),
+                onPressed: () {
+                  this._payOrder();
+                },
+              ),
+              RaisedButton(
+                child: Text("LISTA"),
+                onPressed: () {
+                  _getOrder();
+                },
+              ),
+              RaisedButton(
+                child: Text("METHODS"),
+                onPressed: () {
+                  _getMethods();
+                },
+              ),
+              Divider(),
+              Text("Status: $_status"),
+            ],
+          )),
     );
   }
 }

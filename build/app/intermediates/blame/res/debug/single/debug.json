@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\res\\merged\\debug\\layout_activity_cancelation_return.xml.flat",
+        "source": "C:\\Users\\Fernando Felix\\.gradle\\caches\\transforms-1\\files-1.1\\order-manager-1.4.0.aar\\33918eb60910bdcba2c9399727627c0c\\res\\layout\\activity_cancelation_return.xml"
+    },
+    {
+        "merged": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\res\\merged\\debug\\drawable_launch_background.xml.flat",
+        "source": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\android\\app\\src\\main\\res\\drawable\\launch_background.xml"
+    },
+    {
+        "merged": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\res\\merged\\debug\\drawable_cielo_title.png.flat",
+        "source": "C:\\Users\\Fernando Felix\\.gradle\\caches\\transforms-1\\files-1.1\\printer-manager-2.4.0.aar\\8892c0e3920ef19f1d5f1ebac52d9a05\\res\\drawable\\cielo_title.png"
+    },
+    {
+        "merged": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "D:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    }
+]
