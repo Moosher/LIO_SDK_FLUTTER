@@ -31,8 +31,9 @@ import java.lang.Throwable;
 
 public class MainActivity extends FlutterActivity implements MethodChannel.MethodCallHandler {
 
-  static final String TAG = "test";
+  static final String TAG = "VEK";
   static final String CHANNEL = "com.example.primeiro_projeto/service";
+  
   protected OrderManager orderManager;
   protected InfoManager infoManager;
   protected Credentials credentials;
@@ -50,7 +51,7 @@ public class MainActivity extends FlutterActivity implements MethodChannel.Metho
     credentials = new Credentials(clienteID, token);
   }
 
-  private void createOrder(String valor) {
+  private void createOrder(String valor, MethodChannel.Result result) {
     orderManager.bind(this, new ServiceBindListener() {
 
       @Override
@@ -60,12 +61,11 @@ public class MainActivity extends FlutterActivity implements MethodChannel.Metho
 
       @Override
       public void onServiceBound() {
-        order = orderManager.createDraftOrder("REFERENCIA DA ORDEM");
-
-        order.addItem("324324324324", "coca", Integer.parseInt(valor), 1, "UNIDADE");
+        order = orderManager.createDraftOrder("ORDEM");
+        order.addItem("0", "0", Integer.parseInt(valor), 1, "UNIDADE");
         orderManager.updateOrder(order);
         Log.i(TAG, "bound");
-
+        result.success(null);
       }
 
       @Override
@@ -75,49 +75,54 @@ public class MainActivity extends FlutterActivity implements MethodChannel.Metho
     });
   }
 
-  private void payOrder(MethodChannel.Result result){
+  private void payOrder(MethodChannel.Result result) {
     orderManager.placeOrder(order);
-
-    CheckoutRequest request = new CheckoutRequest.Builder()
-    .orderId(order.getId()) /* Obrigatório */
-    .amount(300) /* Opcional */
-    .build(); 
+    CheckoutRequest request = new CheckoutRequest.Builder().orderId(order.getId()).amount((int) order.getPrice())
+        .build();
 
     orderManager.checkoutOrder(request, new PaymentListener() {
       @Override
       public void onStart() {
-          Log.d("SDKClient", "O pagamento começou.");
-        }
-        
-        @Override
-        public void onPayment( Order order) {
-          Log.d("SDKClient", "Um pagamento foi realizado.");
+        Log.d("SDKClient", "O pagamento começou.");
+      }
 
-          String returnValue = "";
-          for(Payment py : order.getPayments()){
-              returnValue += "Valor: " + order.getPrice() + " | tipo pay: " + py.getPaymentFields().get("primaryProductName");
-          }
-          
-          result.success(returnValue);
-          
+      @Override
+      public void onPayment(Order order) {
+        Log.d("SDKClient", "Um pagamento foi realizado.");
+
+        String returnValue = "Últimos pagamentos:\n";
+        for (Payment py : order.getPayments()) {
+          String valorRetorno = order.getPrice() + "";
+          String centavos = valorRetorno.substring(valorRetorno.length() - 2);
+          String reais = valorRetorno.substring(0, valorRetorno.length() - 2);
+          String valor = reais + "," + centavos;
+          returnValue += "Valor: R$" + valor + " | tipo pagamento: " + py.getPaymentFields().get("primaryProductName");
+        }
+        result.success(returnValue);
+        resetOrder();
       }
-  
-      @Override public void onCancel() {
-          Log.d("SDKClient", "A operação foi cancelada.");
+
+      @Override
+      public void onCancel() {
+        Log.d("SDKClient", "A operação foi cancelada.");
       }
-  
-      @Override public void onError( PaymentError paymentError) {
-          Log.d("SDKClient", "Houve um erro no pagamento.");
+
+      @Override
+      public void onError(PaymentError paymentError) {
+        Log.d("SDKClient", "Houve um erro no pagamento.");
       }
     });
   }
 
-  private void destroyOrder() {
-    CancellationRequest request = new CancellationRequest.Builder().orderId(order.getId()) /* Obrigatório */
-        .authCode(order.getPayments().get(0).getAuthCode()) /* Obrigatório */
-        .cieloCode(order.getPayments().get(0).getCieloCode()) /* Obrigatório */
-        .value(order.getPayments().get(0).getAmount()) /* Obrigatório */
-        .build();
+  private void resetOrder() {
+    order = null;
+    orderManager.unbind();
+  }
+
+  private void cancelOrder() {
+    CancellationRequest request = new CancellationRequest.Builder().orderId(order.getId())
+        .authCode(order.getPayments().get(0).getAuthCode()).cieloCode(order.getPayments().get(0).getCieloCode())
+        .value(order.getPayments().get(0).getAmount()).build();
 
     orderManager.cancelOrder(request, new CancellationListener() {
       @Override
@@ -142,10 +147,10 @@ public class MainActivity extends FlutterActivity implements MethodChannel.Metho
     try {
       if (call.method.equals("start")) {
         orderManager = new OrderManager(credentials, this);
-        this.createOrder(call.argument("valor"));
+        this.createOrder(call.argument("valor"), result);
       }
 
-      if (call.method.equals("order")) {
+      if (call.method.equals("orders")) {
         ResultOrders resultOrders = orderManager.retrieveOrders(200, 0);
         final List<Order> orderList = resultOrders.getResults();
         Log.i(TAG, "listando");
@@ -155,30 +160,33 @@ public class MainActivity extends FlutterActivity implements MethodChannel.Metho
         }
       }
 
-      if (call.method.equals("destroy")) {
-        this.destroyOrder();
+      if (call.method.equals("cancel")) {
+        this.cancelOrder();
       }
       if (call.method.equals("pay")) {
         this.payOrder(result);
       }
+      if (call.method.equals("destroy")) {
+        this.resetOrder();
+      }
 
-      if(call.method.equals("methods")){
-        Log.i("ORDER", "ORDERM");
+      if (call.method.equals("methods")) {
+        Log.i("ORDER", "ORDER");
         Class tClass = Order.class;
         Method[] methods = tClass.getMethods();
         for (int i = 0; i < methods.length; i++) {
-          Log.i("MET", methods[i].getName());
+          Log.i("METODO", methods[i].getName());
         }
-        Log.i("PAYMENT", "PAYM");
+        Log.i("PAYMENT", "PAYMENT");
         tClass = Payment.class;
         methods = tClass.getMethods();
         for (int i = 0; i < methods.length; i++) {
-          Log.i("MET", methods[i].getName());
+          Log.i("METODO", methods[i].getName());
         }
-        
+
       }
     } catch (Exception e) {
-      Log.i(TAG, "ERRORBUG" + e.getMessage());
+      Log.i(TAG, "JAVA ERROR M.A." + e.getMessage());
     }
   }
 }

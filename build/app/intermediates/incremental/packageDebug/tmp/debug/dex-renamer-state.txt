@@ -1,4 +1,4 @@
-#Mon Sep 09 17:43:11 BRT 2019
+#Tue Sep 10 15:23:21 BRT 2019
 base.0=D\:\\Workspaces\\LIO\\LIO_SDK_FLUTTER\\build\\app\\intermediates\\transforms\\dexMerger\\debug\\1
 path.1=classes.dex
 renamed.1=classes2.dex

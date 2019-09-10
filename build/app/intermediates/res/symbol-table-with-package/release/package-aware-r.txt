@@ -1,0 +1,14 @@
+com.example.primeiro_projeto
+dimen activity_horizontal_margin
+dimen activity_vertical_margin
+drawable cielo_title
+drawable launch_background
+id activity_cancelation_return
+layout activity_cancelation_return
+mipmap ic_launcher
+string app_name
+string invalid_ec_exception
+string payment_method_exception
+string receipt_sample
+style AppTheme
+style LaunchTheme
